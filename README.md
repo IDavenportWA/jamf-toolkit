@@ -2,7 +2,7 @@
 
 Production-tested bash scripts for **Jamf Pro** administration, written for real enterprise macOS fleets. Each script is designed to run as a Jamf policy payload (Self Service or automated trigger) unless noted otherwise.
 
-> These scripts come from managing macOS fleets of 3,000+ endpoints. They favor safety and logging over cleverness — the way fleet scripts should.
+> These scripts come from managing macOS fleets of 2,800+ endpoints. They favor safety and logging over cleverness — the way fleet scripts should.
 
 ## Scripts
 
@@ -10,35 +10,35 @@ Production-tested bash scripts for **Jamf Pro** administration, written for real
 
 | Script | Purpose |
 |---|---|
-| `Promote User to Admin.sh` | Temporarily elevates the logged-in user to admin (pair with Demote for time-boxed elevation via Self Service) |
-| `Demote Admin.sh` | Returns a user to standard permissions, enforcing least privilege |
+| `promote-user-to-admin.sh` | Temporarily elevates the logged-in user to admin (pair with the demote script for time-boxed elevation via Self Service) |
+| `demote-admin.sh` | Returns a user to standard permissions, enforcing least privilege |
 
 ### App Deployment & Repair
 
 | Script | Purpose |
 |---|---|
-| `Firefox Latest.sh` | Downloads and installs the latest Firefox directly from Mozilla — no package repackaging needed |
-| `Google Chrome Latest.sh` | Same pattern for Chrome; always current without maintaining installers in Jamf |
-| `Office365 Latest.sh` | Installs the latest Microsoft 365 suite from Microsoft's CDN |
-| `Microsoft Teams Repair.sh` | Clears Teams caches and reinstalls to resolve common client corruption |
+| `firefox-latest.sh` | Downloads and installs the latest Firefox directly from Mozilla — no package repackaging needed |
+| `google-chrome-latest.sh` | Same pattern for Chrome; always current without maintaining installers in Jamf |
+| `office365-latest.sh` | Installs the latest Microsoft 365 suite from Microsoft's CDN |
+| `microsoft-teams-repair.sh` | Clears Teams caches and reinstalls to resolve common client corruption |
 
 ### Device Maintenance
 
 | Script | Purpose |
 |---|---|
-| `Set Device Name.sh` | Standardizes computer names for inventory hygiene and smart group targeting |
-| `Recon+Policy.sh` | Forces inventory update then triggers policy check-in — useful after config changes |
-| `Flush DNS Cache.sh` | Clears DNS cache without a restart (common help desk deflection) |
-| `Disable ipv6.sh` | Disables IPv6 on network interfaces where required by network policy |
-| `Restart Mac.sh` | Graceful restart with user warning for maintenance windows |
-| `SysDiagnose.sh` | Captures a sysdiagnose bundle for escalation to Apple or deep troubleshooting |
+| `set-device-name.sh` | Standardizes computer names for inventory hygiene and smart group targeting |
+| `recon-policy.sh` | Forces inventory update then triggers policy check-in — useful after config changes |
+| `flush-dns-cache.sh` | Clears DNS cache without a restart (common help desk deflection) |
+| `disable-ipv6.sh` | Disables IPv6 on network interfaces where required by network policy |
+| `restart-mac.sh` | Graceful restart with user warning for maintenance windows |
+| `sysdiagnose.sh` | Captures a sysdiagnose bundle for escalation to Apple or deep troubleshooting |
 
 ### End-User Communication
 
 | Script | Purpose |
 |---|---|
-| `Announcement Dialog.sh` | Displays a dialog to the logged-in user — maintenance notices, action prompts |
-| `Set Teams Wallpaper.sh` | Deploys corporate Teams background images to user profiles |
+| `announcement-dialog.sh` | Displays a dialog to the logged-in user — maintenance notices, action prompts |
+| `set-teams-wallpaper.sh` | Deploys corporate Teams background images to user profiles |
 
 ## Usage
 
@@ -49,7 +49,7 @@ Most scripts are designed to be uploaded to **Jamf Pro → Settings → Scripts*
 3. Set trigger (Self Service, check-in, or enrollment complete)
 4. Test on a pilot group before fleet-wide deployment
 
-Scripts that use Jamf script parameters ($4–$11) are commented at the top of the file.
+Scripts that use Jamf script parameters (\$4–\$11) are commented at the top of the file.
 
 ## Requirements
 
