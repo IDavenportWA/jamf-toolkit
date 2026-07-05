@@ -1,0 +1,10 @@
+Boot the Mac into Recovery Mode (hold down command+R during startup or hold power (M-Series)).
+Go to the Utilities menu and open Terminal and type: csrutil disable. This will disable SIP (System Integrity Protection).
+Reboot into the OS.
+Open the integrated terminal and type two commands:
+sudo -s
+/bin/rm -rf /var/db/ConfigurationProfiles/Store/*
+Shut down
+Boot the Mac into Recovery Mode  (hold down command+R during startup or hold power (M-Series)).
+Go to the Utilities menu and open Terminal and type: csrutil enable. This will re-enable SIP.
+Reboot into the OS.
