@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>PayloadContent</key>
+		<array>
+			<dict>
+				<key>PayloadDisplayName</key>
+				<string>Visual Studio Code</string>
+				<key>PayloadIdentifier</key>
+				<string>com.microsoft.VSCode.EBAE60D6-C8A2-4419-92FF-24F8AD5077AB</string>
+				<key>PayloadType</key>
+				<string>com.microsoft.VSCode</string>
+				<key>PayloadUUID</key>
+				<string>EBAE60D6-C8A2-4419-92FF-24F8AD5077AB</string>
+				<key>PayloadVersion</key>
+				<integer>1</integer>
+
+				<key>BrowserChatTools</key>
+				<false/>
+				<key>ChatAgentAllowedNetworkDomains</key>
+				<string></string>
+				<key>ChatAgentDeniedNetworkDomains</key>
+				<string></string>
+				<key>ChatAgentExtensionTools</key>
+				<false/>
+				<key>ChatAgentHostEnabled</key>
+				<false/>
+				<key>ChatAgentMode</key>
+				<false/>
+				<key>ChatAgentNetworkFilter</key>
+				<false/>
+				<key>ChatApprovedAccountOrganizations</key>
+				<string></string>
+				<key>ChatEnabledPlugins</key>
+				<string></string>
+				<key>ChatExtraMarketplaces</key>
+				<string></string>
+				<key>ChatHooks</key>
+				<false/>
+				<key>ChatMCP</key>
+				<string>none</string>
+				<key>ChatPluginsEnabled</key>
+				<false/>
+				<key>ChatStrictMarketplaces</key>
+				<string></string>
+				<key>ChatToolsAutoApprove</key>
+				<false/>
+				<key>ChatToolsEligibleForAutoApproval</key>
+				<string></string>
+				<key>Claude3PIntegration</key>
+				<false/>
+				<key>Codex3PIntegration</key>
+				<false/>
+				<key>CopilotNextEditSuggestions</key>
+				<false/>
+				<key>CopilotReviewAgent</key>
+				<false/>
+				<key>CopilotReviewSelection</key>
+				<false/>
+				<key>CopilotSessionSync</key>
+				<false/>
+				<key>McpEnterpriseManagedAuthIdp</key>
+				<string></string>
+				<key>McpGalleryServiceUrl</key>
+				<string></string>
+
+				<!-- Added from JSON -->
+			<key>AllowedExtensions</key>
+<dict>
+    <key>*</key>
+    <true/>
+
+    <key>OpenAI</key>
+    <false/>
+    <key>Google.geminicodeassist</key>
+    <false/>
+    <key>Google.gemini-cli-vscode-ide-companion</key>
+    <false/>
+    <key>AmazonWebServices.amazon-q-vscode</key>
+    <false/>
+    <key>sourcegraph.cody-ai</key>
+    <false/>
+    <key>JetBrains.jetbrains-ai-assistant</key>
+    <false/>
+    <key>Codeium.codeium</key>
+    <false/>
+    <key>saoudrizwan.claude-dev</key>
+    <false/>
+    <key>Blackboxapp.blackboxagent</key>
+    <false/>
+    <key>RooVeterinaryInc.roo-cline</key>
+    <false/>
+    <key>kilocode.Kilo-Code</key>
+    <false/>
+    <key>Keploy.keployio</key>
+    <false/>
+    <key>augment.vscode-augment</key>
+    <false/>
+    <key>CodeRabbit.coderabbit-vscode</key>
+    <false/>
+    <key>Vizards.deepseek-v4-for-copilot</key>
+    <false/>
+    <key>HuggingFace.huggingface-vscode-chat</key>
+    <false/>
+    <key>Ollama.ollama</key>
+    <false/>
+    <key>Continue.continue</key>
+    <false/>
+    <key>MarsCode.marscode-extension</key>
+    <false/>
+    <key>DanielSanMedium.dscodegpt</key>
+    <false/>
+    <key>mintlify.document</key>
+    <false/>
+    <key>aminer.codegeex</key>
+    <false/>
+    <key>Codium.codium</key>
+    <false/>
+    <key>Bito.Bito</key>
+    <false/>
+    <key>FittenTech.Fitten-Code</key>
+    <false/>
+    <key>Tencent-Cloud.coding-copilot</key>
+    <false/>
+    <key>GoogleCloudTools.cloudcode</key>
+    <false/>
+    <key>GustavoASC.google-drive-vscode</key>
+    <false/>
+</dict>
+
+				<key>ExtensionGalleryServiceUrl</key>
+				<string></string>
+
+				<key>ExtensionsAutoUpdate</key>
+				<string>on</string>
+				<key>ExtensionsAutoUpdateDelay</key>
+				<integer>2</integer>
+
+				<key>ChatAgentSandboxAllowAutoApprove</key>
+				<false/>
+				<key>ChatAgentSandboxAllowUnsandboxedCommands</key>
+				<false/>
+				<key>ChatAgentSandboxEnabled</key>
+				<string>off</string>
+				<key>ChatToolsTerminalEnableAutoApprove</key>
+				<false/>
+
+				<!-- Updated from JSON -->
+				<key>EnableFeedback</key>
+				<true/>
+
+				<key>TelemetryLevel</key>
+				<string>off</string>
+
+				<key>UpdateMode</key>
+				<string>start</string>
+			</dict>
+		</array>
+
+		<key>PayloadDescription</key>
+		<string>This profile manages Visual Studio Code. For more information see https://code.visualstudio.com/docs/setup/enterprise</string>
+		<key>PayloadDisplayName</key>
+		<string>Visual Studio Code</string>
+		<key>PayloadIdentifier</key>
+		<string>com.microsoft.VSCode</string>
+		<key>PayloadOrganization</key>
+		<string>Microsoft</string>
+		<key>PayloadType</key>
+		<string>Configuration</string>
+		<key>PayloadUUID</key>
+		<string>C6B5723A-6539-4F31-8A4E-3CC96E51F48C</string>
+		<key>PayloadVersion</key>
+		<integer>1</integer>
+		<key>TargetDeviceType</key>
+		<integer>5</integer>
+	</dict>
+</plist>
