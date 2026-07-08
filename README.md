@@ -1,55 +1,41 @@
 # jamf-toolkit
 
-Production-tested bash scripts for **Jamf Pro** administration, written for real enterprise macOS fleets. Each script is designed to run as a Jamf policy payload (Self Service or automated trigger) unless noted otherwise.
+Production-tested bash scripts, Extension Attributes, and configuration profiles for Jamf Pro administration, written for real enterprise macOS fleets.
 
-> These scripts come from managing macOS fleets of 2,800+ endpoints. They favor safety and logging over cleverness — the way fleet scripts should.
+These tools come from managing macOS fleets of 3,000+ endpoints. They prioritize safety, reliability, clear logging, and real-world fleet operations over cleverness — the way production tooling should be built.
 
-## Scripts
+## Featured Scripts
 
-### Account Management
-
-| Script | Purpose |
-|---|---|
-| `promote-user-to-admin.sh` | Temporarily elevates the logged-in user to admin (pair with the demote script for time-boxed elevation via Self Service) |
-| `demote-admin.sh` | Returns a user to standard permissions, enforcing least privilege |
-
-### App Deployment & Repair
+These scripts represent some of my strongest examples of enterprise macOS workflows, automation, and fleet management practices:
 
 | Script | Purpose |
 |---|---|
-| `firefox-latest.sh` | Downloads and installs the latest Firefox directly from Mozilla — no package repackaging needed |
-| `google-chrome-latest.sh` | Same pattern for Chrome; always current without maintaining installers in Jamf |
-| `office365-latest.sh` | Installs the latest Microsoft 365 suite from Microsoft's CDN |
-| `microsoft-teams-repair.sh` | Clears Teams caches and reinstalls to resolve common client corruption |
+| `restart-mac.sh` | Graceful restart workflow with user notifications and maintenance messaging — useful for patching, remediation, and scheduled maintenance |
+| `announcement-dialog.sh` | Displays user-facing dialogs for maintenance notices, required actions, and IT communications |
+| `set-teams-wallpaper.sh` | Deploys corporate Microsoft Teams background images to user profiles |
+| `firefox-latest.sh` | Downloads and installs the latest Firefox release directly from Mozilla without maintaining package installers |
+| `google-chrome-latest.sh` | Downloads and installs the latest Chrome release directly from Google |
+| `office365-latest.sh` | Installs the latest Microsoft 365 applications directly from Microsoft's CDN |
 
-### Device Maintenance
+# Extension Attributes & Configuration Profiles
 
-| Script | Purpose |
+These resources demonstrate endpoint visibility, software inventory automation, and application control using Jamf Pro.
+
+| Resource | Purpose |
 |---|---|
-| `set-device-name.sh` | Standardizes computer names for inventory hygiene and smart group targeting |
-| `recon-policy.sh` | Forces inventory update then triggers policy check-in — useful after config changes |
-| `flush-dns-cache.sh` | Clears DNS cache without a restart (common help desk deflection) |
-| `disable-ipv6.sh` | Disables IPv6 on network interfaces where required by network policy |
-| `restart-mac.sh` | Graceful restart with user warning for maintenance windows |
-| `sysdiagnose.sh` | Captures a sysdiagnose bundle for escalation to Apple or deep troubleshooting |
-
-### End-User Communication
-
-| Script | Purpose |
-|---|---|
-| `announcement-dialog.sh` | Displays a dialog to the logged-in user — maintenance notices, action prompts |
-| `set-teams-wallpaper.sh` | Deploys corporate Teams background images to user profiles |
+| `homebrew-installed-packages.sh` | Extension Attribute that inventories installed Homebrew packages and casks across managed macOS devices for software visibility, compliance reporting, and Smart Group targeting |
+| `vscode-extension-allowlist.mobileconfig` | Configuration profile that manages Visual Studio Code extension access by enforcing an approved extension allowlist through managed preferences |
 
 ## Usage
 
 Most scripts are designed to be uploaded to **Jamf Pro → Settings → Scripts** and attached to a policy. Typical pattern:
 
-1. Add the script to Jamf Pro
-2. Create a policy scoped to the target smart group
+1. Add the script/profile to Jamf Pro
+2. Create a policy/profile scoped to the target smart group
 3. Set trigger (Self Service, check-in, or enrollment complete)
 4. Test on a pilot group before fleet-wide deployment
 
-Scripts that use Jamf script parameters (\$4–\$11) are commented at the top of the file.
+*Scripts that use Jamf script parameters (\$4–\$11) are commented at the top of the file.*
 
 ## Requirements
 
