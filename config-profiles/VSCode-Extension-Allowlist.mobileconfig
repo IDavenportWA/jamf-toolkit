@@ -65,69 +65,8 @@
 				<key>McpGalleryServiceUrl</key>
 				<string></string>
 
-				<!-- Added from JSON -->
-			<key>AllowedExtensions</key>
-<dict>
-    <key>*</key>
-    <true/>
-
-    <key>OpenAI</key>
-    <false/>
-    <key>Google.geminicodeassist</key>
-    <false/>
-    <key>Google.gemini-cli-vscode-ide-companion</key>
-    <false/>
-    <key>AmazonWebServices.amazon-q-vscode</key>
-    <false/>
-    <key>sourcegraph.cody-ai</key>
-    <false/>
-    <key>JetBrains.jetbrains-ai-assistant</key>
-    <false/>
-    <key>Codeium.codeium</key>
-    <false/>
-    <key>saoudrizwan.claude-dev</key>
-    <false/>
-    <key>Blackboxapp.blackboxagent</key>
-    <false/>
-    <key>RooVeterinaryInc.roo-cline</key>
-    <false/>
-    <key>kilocode.Kilo-Code</key>
-    <false/>
-    <key>Keploy.keployio</key>
-    <false/>
-    <key>augment.vscode-augment</key>
-    <false/>
-    <key>CodeRabbit.coderabbit-vscode</key>
-    <false/>
-    <key>Vizards.deepseek-v4-for-copilot</key>
-    <false/>
-    <key>HuggingFace.huggingface-vscode-chat</key>
-    <false/>
-    <key>Ollama.ollama</key>
-    <false/>
-    <key>Continue.continue</key>
-    <false/>
-    <key>MarsCode.marscode-extension</key>
-    <false/>
-    <key>DanielSanMedium.dscodegpt</key>
-    <false/>
-    <key>mintlify.document</key>
-    <false/>
-    <key>aminer.codegeex</key>
-    <false/>
-    <key>Codium.codium</key>
-    <false/>
-    <key>Bito.Bito</key>
-    <false/>
-    <key>FittenTech.Fitten-Code</key>
-    <false/>
-    <key>Tencent-Cloud.coding-copilot</key>
-    <false/>
-    <key>GoogleCloudTools.cloudcode</key>
-    <false/>
-    <key>GustavoASC.google-drive-vscode</key>
-    <false/>
-</dict>
+				<key>AllowedExtensions</key>
+				<string>{"*": true, "openai": false, "Google.geminicodeassist": false, "Google.gemini-cli-vscode-ide-companion": false, "AmazonWebServices.amazon-q-vscode": false, "sourcegraph.cody-ai": false, "JetBrains.jetbrains-ai-assistant": false, "Codeium.codeium": false, "saoudrizwan.claude-dev": false, "Blackboxapp.blackboxagent": false, "RooVeterinaryInc.roo-cline": false, "kilocode.Kilo-Code": false, "Keploy.keployio": false, "augment.vscode-augment": false, "CodeRabbit.coderabbit-vscode": false, "Vizards.deepseek-v4-for-copilot": false, "HuggingFace.huggingface-vscode-chat": false, "Ollama.ollama": false, "Continue.continue": false, "MarsCode.marscode-extension": false, "DanielSanMedium.dscodegpt": false, "mintlify.document": false, "aminer.codegeex": false, "Codium.codium": false, "Bito.Bito": false, "FittenTech.Fitten-Code": false, "Tencent-Cloud.coding-copilot": false, "GoogleCloudTools.cloudcode": false, "GustavoASC.google-drive-vscode": false}</string>
 
 				<key>ExtensionGalleryServiceUrl</key>
 				<string></string>
