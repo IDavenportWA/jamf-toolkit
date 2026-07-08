@@ -1,4 +1,4 @@
-# Mac-Scripts
+# Jamf-Toolkit
 
 Production-tested bash scripts for **Jamf Pro** administration, written for real enterprise macOS fleets. Each script is designed to run as a Jamf policy payload (Self Service or automated trigger) unless noted otherwise.
 
