@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+      <key>TemporaryUserPermissions</key>
+<dict>
+      <key>TemporaryUserPromotion</key>
+      <true/>
+      <key>UserPromotionTimer</key>
+      <true/>
+      <key>UserPromotionDuration</key>
+      <integer>15</integer>
+      <key>UserPromotionReason</key>
+      <true/>
+      <key>UserPromotionChoices</key>
+          <array>
+              <string>Hardware driver install</string>
+              <string>Xcode software development</string>
+              <string>General use</string>
+          </array>
+</dict>
+</dict>
+</plist>
