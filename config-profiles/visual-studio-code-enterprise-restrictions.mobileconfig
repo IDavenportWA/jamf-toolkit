@@ -16,55 +16,6 @@
 				<key>PayloadVersion</key>
 				<integer>1</integer>
 
-				<key>BrowserChatTools</key>
-				<false/>
-				<key>ChatAgentAllowedNetworkDomains</key>
-				<string></string>
-				<key>ChatAgentDeniedNetworkDomains</key>
-				<string></string>
-				<key>ChatAgentExtensionTools</key>
-				<false/>
-				<key>ChatAgentHostEnabled</key>
-				<false/>
-				<key>ChatAgentMode</key>
-				<false/>
-				<key>ChatAgentNetworkFilter</key>
-				<false/>
-				<key>ChatApprovedAccountOrganizations</key>
-				<string></string>
-				<key>ChatEnabledPlugins</key>
-				<string></string>
-				<key>ChatExtraMarketplaces</key>
-				<string></string>
-				<key>ChatHooks</key>
-				<false/>
-				<key>ChatMCP</key>
-				<string>none</string>
-				<key>ChatPluginsEnabled</key>
-				<false/>
-				<key>ChatStrictMarketplaces</key>
-				<string></string>
-				<key>ChatToolsAutoApprove</key>
-				<false/>
-				<key>ChatToolsEligibleForAutoApproval</key>
-				<string></string>
-				<key>Claude3PIntegration</key>
-				<false/>
-				<key>Codex3PIntegration</key>
-				<false/>
-				<key>CopilotNextEditSuggestions</key>
-				<false/>
-				<key>CopilotReviewAgent</key>
-				<false/>
-				<key>CopilotReviewSelection</key>
-				<false/>
-				<key>CopilotSessionSync</key>
-				<false/>
-				<key>McpEnterpriseManagedAuthIdp</key>
-				<string></string>
-				<key>McpGalleryServiceUrl</key>
-				<string></string>
-
 				<key>AllowedExtensions</key>
 				<string>{"*": true, "openai": false, "Google.geminicodeassist": false, "Google.gemini-cli-vscode-ide-companion": false, "AmazonWebServices.amazon-q-vscode": false, "sourcegraph.cody-ai": false, "JetBrains.jetbrains-ai-assistant": false, "Codeium.codeium": false, "saoudrizwan.claude-dev": false, "Blackboxapp.blackboxagent": false, "RooVeterinaryInc.roo-cline": false, "kilocode.Kilo-Code": false, "Keploy.keployio": false, "augment.vscode-augment": false, "CodeRabbit.coderabbit-vscode": false, "Vizards.deepseek-v4-for-copilot": false, "HuggingFace.huggingface-vscode-chat": false, "Ollama.ollama": false, "Continue.continue": false, "MarsCode.marscode-extension": false, "DanielSanMedium.dscodegpt": false, "mintlify.document": false, "aminer.codegeex": false, "Codium.codium": false, "Bito.Bito": false, "FittenTech.Fitten-Code": false, "Tencent-Cloud.coding-copilot": false, "GoogleCloudTools.cloudcode": false, "GustavoASC.google-drive-vscode": false}</string>
 
@@ -76,16 +27,6 @@
 				<key>ExtensionsAutoUpdateDelay</key>
 				<integer>2</integer>
 
-				<key>ChatAgentSandboxAllowAutoApprove</key>
-				<false/>
-				<key>ChatAgentSandboxAllowUnsandboxedCommands</key>
-				<false/>
-				<key>ChatAgentSandboxEnabled</key>
-				<string>off</string>
-				<key>ChatToolsTerminalEnableAutoApprove</key>
-				<false/>
-
-				<!-- Updated from JSON -->
 				<key>EnableFeedback</key>
 				<true/>
 
