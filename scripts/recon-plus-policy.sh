@@ -1,5 +1,23 @@
 #!/bin/bash
 
+###
+#
+#                    Author : Isaac Davenport
+#                   Created : 07-22-2026
+#             Last Modified : 07-23-2026
+#                   Version : 1.1
+#               Tested with : macOS 26.5.2
+# 
+#   1.1: swiftDialog now self-installs/updates from GitHub (Team ID verified)
+#        instead of bailing out when not installed. Runs before the status
+#        window launches. Window auto-closes 15 seconds after all steps complete (user can
+#        still press Close sooner); guaranteed teardown so the script always
+#        ends.
+#   1.0: Initial version — jamf recon, killall jamf, jamf policy with live
+#        command output and per-step status in one swiftDialog window.
+#
+###
+
 ################################################################################
 # Jamf Maintenance — swiftDialog
 #
@@ -10,7 +28,9 @@
 #
 # Displays live command output and success/failure status in one movable window.
 #
-# Designed to run from a Jamf Pro policy as root.
+# NOTE: Run manually (sudo) or via Self Service. Do NOT deploy as a
+# check-in-triggered policy — killall jamf kills the policy's own parent
+# process and the policy log will stick at "Pending".
 ################################################################################
 
 ###############################################################################
@@ -22,6 +42,123 @@ JAMF="/usr/local/bin/jamf"
 
 COMMAND_FILE="/var/tmp/jamf-maintenance-dialog.log"
 OUTPUT_FILE="/var/tmp/jamf-maintenance-output.log"
+
+###############################################################################
+# swiftDialog install / update
+###############################################################################
+
+DIALOG_RELEASES_API="https://api.github.com/repos/swiftDialog/swiftDialog/releases/latest"
+EXPECTED_DIALOG_TEAM_ID="PWA5E9TQ59"
+
+logMe () {
+    echo "$(/bin/date '+%Y-%m-%d %H:%M:%S'): ${1}"
+}
+
+install_dialog () {
+    # Downloads and installs the latest swiftDialog PKG from GitHub,
+    # verifying the Apple Developer Team ID before install.
+    # Returns 0 on success, 1 on failure.
+
+    logMe "Installing/updating swiftDialog..."
+
+    local dialogURL
+    dialogURL=$(curl -L --silent --fail "${DIALOG_RELEASES_API}" \
+        | awk -F '"' "/browser_download_url/ && /pkg\"/ { print \$4; exit }")
+
+    if [[ -z "${dialogURL}" ]]; then
+        logMe "ERROR: Could not determine swiftDialog download URL (no network or GitHub API unavailable)."
+        return 1
+    fi
+
+    local workDirectory tempDirectory
+    workDirectory=$( basename "$0" )
+    tempDirectory=$( mktemp -d "/private/tmp/${workDirectory}.XXXXXX" )
+
+    if ! curl --location --silent --fail "${dialogURL}" -o "${tempDirectory}/Dialog.pkg"; then
+        logMe "ERROR: Failed to download swiftDialog PKG from ${dialogURL}"
+        /bin/rm -rf "${tempDirectory}"
+        return 1
+    fi
+
+    local teamID
+    teamID=$(spctl -a -vv -t install "${tempDirectory}/Dialog.pkg" 2>&1 \
+        | awk '/origin=/ {print $NF }' | tr -d '()')
+
+    if [[ "${teamID}" != "${EXPECTED_DIALOG_TEAM_ID}" ]]; then
+        logMe "ERROR: swiftDialog Team ID verification FAILED (expected ${EXPECTED_DIALOG_TEAM_ID}, got '${teamID}'). Aborting install."
+        /bin/rm -rf "${tempDirectory}"
+        return 1
+    fi
+
+    if ! /usr/sbin/installer -pkg "${tempDirectory}/Dialog.pkg" -target / >/dev/null 2>&1; then
+        logMe "ERROR: swiftDialog installer failed."
+        /bin/rm -rf "${tempDirectory}"
+        return 1
+    fi
+
+    /bin/rm -rf "${tempDirectory}"
+
+    if [[ ! -x "${DIALOG}" ]]; then
+        logMe "ERROR: swiftDialog install completed but binary not found at ${DIALOG}"
+        return 1
+    fi
+
+    logMe "swiftDialog installed: version $("${DIALOG}" --version 2>/dev/null)"
+    return 0
+}
+
+get_latest_dialog_version () {
+    # Echoes the latest release tag (e.g. "2.5.5"), empty on failure
+    curl -L --silent --fail "${DIALOG_RELEASES_API}" \
+        | awk -F '"' '/"tag_name"/ { print $4; exit }' \
+        | sed 's/^v//'
+}
+
+check_swift_dialog () {
+    # Ensures swiftDialog is present and up to date with the latest GitHub release.
+    # - Missing + install fails  -> hard fail (dialogs are required)
+    # - Present but outdated + update fails (e.g. offline) -> continue with existing version
+    logMe "Ensuring swiftDialog is installed and current..."
+
+    local latest_ver installed_ver
+    latest_ver=$(get_latest_dialog_version)
+
+    if [[ ! -x "${DIALOG}" ]]; then
+        logMe "swiftDialog not found at ${DIALOG}; installing latest..."
+        if ! install_dialog; then
+            logMe "ERROR: swiftDialog is required but could not be installed."
+            osascript -e 'display dialog "swiftDialog could not be installed. Check network access and try again." buttons {"OK"} default button 1' 2>/dev/null
+            exit 1
+        fi
+        return 0
+    fi
+
+    installed_ver=$("${DIALOG}" --version 2>/dev/null)
+    if [[ -z "${installed_ver}" ]]; then
+        logMe "swiftDialog present but version unreadable; reinstalling latest..."
+        if ! install_dialog; then
+            logMe "ERROR: swiftDialog is required but could not be (re)installed."
+            osascript -e 'display dialog "swiftDialog could not be reinstalled. Check network access and try again." buttons {"OK"} default button 1' 2>/dev/null
+            exit 1
+        fi
+        return 0
+    fi
+
+    if [[ -z "${latest_ver}" ]]; then
+        logMe "WARNING: Could not query latest swiftDialog release (offline?). Continuing with installed version ${installed_ver}."
+        return 0
+    fi
+
+    # installed_ver looks like "2.5.5.4802"; latest tag looks like "2.5.5"
+    if [[ "${installed_ver}" == "${latest_ver}"* ]]; then
+        logMe "swiftDialog is current (version ${installed_ver})"
+    else
+        logMe "swiftDialog ${installed_ver} is outdated (latest: ${latest_ver}); updating..."
+        if ! install_dialog; then
+            logMe "WARNING: swiftDialog update failed; continuing with existing version ${installed_ver}."
+        fi
+    fi
+}
 
 ###############################################################################
 # Logged-in User
@@ -51,11 +188,6 @@ trap cleanup EXIT
 # Validation
 ###############################################################################
 
-if [[ ! -x "$DIALOG" ]]; then
-    osascript -e 'display dialog "swiftDialog is not installed." buttons {"OK"} default button 1'
-    exit 1
-fi
-
 if [[ ! -x "$JAMF" ]]; then
     osascript -e 'display dialog "The Jamf binary was not found at /usr/local/bin/jamf." buttons {"OK"} default button 1'
     exit 1
@@ -65,6 +197,10 @@ if [[ -z "$LOGGED_IN_USER" ]] || [[ -z "$USER_UID" ]]; then
     echo "No logged-in user session was found."
     exit 1
 fi
+
+# Ensure swiftDialog is installed and up to date (replaces the old
+# "swiftDialog is not installed" bail-out)
+check_swift_dialog
 
 rm -f "$COMMAND_FILE" "$OUTPUT_FILE"
 touch "$COMMAND_FILE" "$OUTPUT_FILE"
@@ -163,8 +299,8 @@ run_command() {
 ###############################################################################
 # Launch swiftDialog
 #
-# Jamf policies run as root. Launching swiftDialog through the logged-in user's
-# GUI session makes the window behave like a normal macOS window.
+# Root context: launching swiftDialog through the logged-in user's GUI
+# session makes the window behave like a normal macOS window.
 ###############################################################################
 
 launchctl asuser "$USER_UID" \
@@ -258,19 +394,39 @@ FAILURE_COUNT=0
 
 if [[ "$FAILURE_COUNT" -eq 0 ]]; then
     send_dialog_command \
-        "message: **Jamf maintenance finished successfully.**  \n\nAll three commands completed without errors."
+        "message: **Jamf maintenance finished successfully.**  \n\nAll three commands completed without errors. This window will close automatically in 15 seconds."
 else
     send_dialog_command \
-        "message: **Jamf maintenance finished with $FAILURE_COUNT error(s).**  \n\nReview the command statuses below."
+        "message: **Jamf maintenance finished with $FAILURE_COUNT error(s).**  \n\nReview the command statuses below. This window will close automatically in 15 seconds."
 fi
 
 send_dialog_command "button1: enable"
 
 ###############################################################################
-# Keep Script Running Until Window Closes
+# Auto-close 15 seconds after completion
+#
+# The user can press Close sooner; if the window is still open after 15
+# seconds, it is told to quit, with a force-kill fallback so the script
+# always ends.
 ###############################################################################
 
-wait "$DIALOG_PID"
+for (( i = 0; i < 15; i++ )); do
+    kill -0 "$DIALOG_PID" 2>/dev/null || break
+    sleep 1
+done
+
+if kill -0 "$DIALOG_PID" 2>/dev/null; then
+    send_dialog_command "quit:"
+
+    for (( i = 0; i < 10; i++ )); do
+        kill -0 "$DIALOG_PID" 2>/dev/null || break
+        sleep 1
+    done
+
+    kill "$DIALOG_PID" 2>/dev/null
+fi
+
+wait "$DIALOG_PID" 2>/dev/null
 
 if [[ "$FAILURE_COUNT" -eq 0 ]]; then
     exit 0
