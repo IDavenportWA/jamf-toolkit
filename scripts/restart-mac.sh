@@ -4,11 +4,136 @@
 #
 #                    Author : Isaac Davenport
 #                   Created : 09-03-2025
-#             Last Modified : 12-08-2025
-#                   Version : 1.4
-#               Tested with : macOS 15.7.2
+#             Last Modified : 07-23-2026
+#                   Version : 1.5
+#               Tested with : macOS 26.5.2
+#
+#   1.5: swiftDialog now self-installs/updates from GitHub (Team ID verified)
+#        instead of relying on the Jamf policy package. The check only runs
+#        when a dialog will actually be shown (uptime >= 7 days), so machines
+#        under the threshold never touch the GitHub API.
 #
 ###
+
+###############################################################################
+# swiftDialog install / update
+###############################################################################
+
+SW_DIALOG="/usr/local/bin/dialog"
+DIALOG_RELEASES_API="https://api.github.com/repos/swiftDialog/swiftDialog/releases/latest"
+EXPECTED_DIALOG_TEAM_ID="PWA5E9TQ59"
+
+logMe () {
+    echo "$(/bin/date '+%Y-%m-%d %H:%M:%S'): ${1}"
+}
+
+install_dialog () {
+    # Downloads and installs the latest swiftDialog PKG from GitHub,
+    # verifying the Apple Developer Team ID before install.
+    # Returns 0 on success, 1 on failure.
+
+    logMe "Installing/updating swiftDialog..."
+
+    local dialogURL
+    dialogURL=$(curl -L --silent --fail "${DIALOG_RELEASES_API}" \
+        | awk -F '"' "/browser_download_url/ && /pkg\"/ { print \$4; exit }")
+
+    if [[ -z "${dialogURL}" ]]; then
+        logMe "ERROR: Could not determine swiftDialog download URL (no network or GitHub API unavailable)."
+        return 1
+    fi
+
+    local workDirectory tempDirectory
+    workDirectory=$( basename "$0" )
+    tempDirectory=$( mktemp -d "/private/tmp/${workDirectory}.XXXXXX" )
+
+    if ! curl --location --silent --fail "${dialogURL}" -o "${tempDirectory}/Dialog.pkg"; then
+        logMe "ERROR: Failed to download swiftDialog PKG from ${dialogURL}"
+        /bin/rm -rf "${tempDirectory}"
+        return 1
+    fi
+
+    local teamID
+    teamID=$(spctl -a -vv -t install "${tempDirectory}/Dialog.pkg" 2>&1 \
+        | awk '/origin=/ {print $NF }' | tr -d '()')
+
+    if [[ "${teamID}" != "${EXPECTED_DIALOG_TEAM_ID}" ]]; then
+        logMe "ERROR: swiftDialog Team ID verification FAILED (expected ${EXPECTED_DIALOG_TEAM_ID}, got '${teamID}'). Aborting install."
+        /bin/rm -rf "${tempDirectory}"
+        return 1
+    fi
+
+    if ! /usr/sbin/installer -pkg "${tempDirectory}/Dialog.pkg" -target / >/dev/null 2>&1; then
+        logMe "ERROR: swiftDialog installer failed."
+        /bin/rm -rf "${tempDirectory}"
+        return 1
+    fi
+
+    /bin/rm -rf "${tempDirectory}"
+
+    if [[ ! -x "${SW_DIALOG}" ]]; then
+        logMe "ERROR: swiftDialog install completed but binary not found at ${SW_DIALOG}"
+        return 1
+    fi
+
+    logMe "swiftDialog installed: version $("${SW_DIALOG}" --version 2>/dev/null)"
+    return 0
+}
+
+get_latest_dialog_version () {
+    # Echoes the latest release tag (e.g. "2.5.5"), empty on failure
+    curl -L --silent --fail "${DIALOG_RELEASES_API}" \
+        | awk -F '"' '/"tag_name"/ { print $4; exit }' \
+        | sed 's/^v//'
+}
+
+check_swift_dialog () {
+    # Ensures swiftDialog is present and up to date with the latest GitHub release.
+    # - Missing + install fails  -> hard fail (dialogs are required)
+    # - Present but outdated + update fails (e.g. offline) -> continue with existing version
+    logMe "Ensuring swiftDialog is installed and current..."
+
+    local latest_ver installed_ver
+    latest_ver=$(get_latest_dialog_version)
+
+    if [[ ! -x "${SW_DIALOG}" ]]; then
+        logMe "swiftDialog not found at ${SW_DIALOG}; installing latest..."
+        if ! install_dialog; then
+            logMe "ERROR: swiftDialog is required but could not be installed."
+            exit 1
+        fi
+        return 0
+    fi
+
+    installed_ver=$("${SW_DIALOG}" --version 2>/dev/null)
+    if [[ -z "${installed_ver}" ]]; then
+        logMe "swiftDialog present but version unreadable; reinstalling latest..."
+        if ! install_dialog; then
+            logMe "ERROR: swiftDialog is required but could not be (re)installed."
+            exit 1
+        fi
+        return 0
+    fi
+
+    if [[ -z "${latest_ver}" ]]; then
+        logMe "WARNING: Could not query latest swiftDialog release (offline?). Continuing with installed version ${installed_ver}."
+        return 0
+    fi
+
+    # installed_ver looks like "2.5.5.4802"; latest tag looks like "2.5.5"
+    if [[ "${installed_ver}" == "${latest_ver}"* ]]; then
+        logMe "swiftDialog is current (version ${installed_ver})"
+    else
+        logMe "swiftDialog ${installed_ver} is outdated (latest: ${latest_ver}); updating..."
+        if ! install_dialog; then
+            logMe "WARNING: swiftDialog update failed; continuing with existing version ${installed_ver}."
+        fi
+    fi
+}
+
+###############################################################################
+# Main
+###############################################################################
 
 # Kill pending Dialog
 killall Dialog 2>/dev/null
@@ -50,11 +175,16 @@ uptime_days="$((uptime_hours / 24))"
 # Hardcoded uptime for testing on your own computer.
 #uptime_days="13"
 
+# Exit early before touching swiftDialog/GitHub if no dialog will be shown
 if [ "$uptime_days" -le 6 ]; then
  echo "Uptime less than or equal to 6 days. Exit."
  exit 0
+fi
 
-elif [ "$uptime_days" -ge 7 ] && [ "$uptime_days" -le 13 ]; then
+# A dialog WILL be shown — make sure swiftDialog is installed and current
+check_swift_dialog
+
+if [ "$uptime_days" -ge 7 ] && [ "$uptime_days" -le 13 ]; then
  echo "Uptime between 7 and 13 days. Dialog."
  afplay "/System/Library/Sounds/Funk.aiff" & disown
  launchctl asuser "$USER_ID" sudo -u "$CURRENT_USER" /usr/local/bin/dialog \
