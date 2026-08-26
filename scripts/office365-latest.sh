@@ -1,5 +1,19 @@
 #!/bin/bash
 
+###
+#
+#                    Author : Isaac Davenport
+#                   Created : 08-25-2026
+#             Last Modified : 08-25-2026
+#                   Version : 1.0
+#               Tested with : macOS 26.5.2
+#
+#   1.0: Initial versioned header. Downloads and installs the latest
+#        Microsoft 365 release, warning open Office apps before quitting
+#        and relaunching them.
+#
+###
+
 # Define the download URL
 URL="https://go.microsoft.com/fwlink/?linkid=2009112"
 

@@ -1,4 +1,18 @@
 #!/bin/bash
+
+###
+#
+#                    Author : Isaac Davenport
+#                   Created : 08-25-2026
+#             Last Modified : 08-25-2026
+#                   Version : 1.0
+#               Tested with : macOS 26.5.2
+#
+#   1.0: Initial versioned header. Runs sysdiagnose for the logged-in user
+#        and saves the output to their Downloads folder.
+#
+###
+
 #sudo sysdiagnose -f ~/Desktop/
 
 #sudo sysdiagnose -u -f ~/Desktop/

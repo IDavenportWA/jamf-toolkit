@@ -1,5 +1,18 @@
 #!/bin/sh
 
+###
+#
+#                    Author : Isaac Davenport
+#                   Created : 08-25-2026
+#             Last Modified : 08-25-2026
+#                   Version : 1.0
+#               Tested with : macOS 26.5.2
+#
+#   1.0: Initial versioned header. Promotes the currently logged-in user to
+#        local admin rights and notifies them via Jamf Helper.
+#
+###
+
 # define jamfhelper location
 
 jhelp="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"

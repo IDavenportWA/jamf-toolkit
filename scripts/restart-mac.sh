@@ -4,7 +4,7 @@
 #
 #                    Author : Isaac Davenport
 #                   Created : 09-03-2025
-#             Last Modified : 07-23-2026
+#             Last Modified : 08-25-2026
 #                   Version : 1.5
 #               Tested with : macOS 26.5.2
 #

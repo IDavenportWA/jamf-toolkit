@@ -1,5 +1,18 @@
 #!/bin/bash
 
+###
+#
+#                    Author : Isaac Davenport
+#                   Created : 08-25-2026
+#             Last Modified : 08-25-2026
+#                   Version : 1.0
+#               Tested with : macOS 26.5.2
+#
+#   1.0: Initial versioned header. Quits Microsoft Teams, clears its cache
+#        directories, and relaunches it to resolve common Teams issues.
+#
+###
+
 # Quit Teams
 osascript -e 'tell application "Microsoft Teams" to quit'
 sleep 3

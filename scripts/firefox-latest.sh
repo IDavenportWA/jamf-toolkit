@@ -1,5 +1,18 @@
 #!/bin/bash
 
+###
+#
+#                    Author : Isaac Davenport
+#                   Created : 08-25-2026
+#             Last Modified : 08-25-2026
+#                   Version : 1.0
+#               Tested with : macOS 26.5.2
+#
+#   1.0: Initial versioned header. Downloads and installs the latest Firefox
+#        release from Mozilla, relaunching it afterward if it was running.
+#
+###
+
 # Variables
 URL="https://download.mozilla.org/?product=firefox-latest&os=osx&lang=en-US"
 DMG_PATH="/tmp/Firefox.dmg"

@@ -1,5 +1,18 @@
 #!/bin/sh
 
+###
+#
+#                    Author : Isaac Davenport
+#                   Created : 08-25-2026
+#             Last Modified : 08-25-2026
+#                   Version : 1.0
+#               Tested with : macOS 26.5.2
+#
+#   1.0: Initial versioned header. Displays a customizable IT announcement
+#        dialog to the logged-in user via Jamf Helper.
+#
+###
+
 ########## Variables #########
 JHELPER="/Library/Application Support/JAMF/bin/jamfHelper.app/Contents/MacOS/jamfHelper"
 
