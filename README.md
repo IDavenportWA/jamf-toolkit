@@ -2,7 +2,7 @@
 
 Production-tested bash scripts, Extension Attributes, and configuration profiles for Jamf Pro administration, written for real enterprise macOS fleets.
 
-These tools come from managing macOS fleets of 3,000+ endpoints. They prioritize safety, reliability, clear logging, and real-world fleet operations over cleverness — the way production tooling should be built.
+These tools come from managing macOS fleets from 300 to 2,800+ endpoints. They prioritize safety, reliability, clear logging, and real-world fleet operations over cleverness — the way production tooling should be built.
 
 ## Featured Scripts
 
