@@ -10,7 +10,7 @@ These scripts represent some of my strongest examples of enterprise macOS workfl
 
 | Script | Purpose |
 |---|---|
-| `force-psso.sh` | Detects Macs that never completed Platform SSO registration and re-prompts the user via swiftDialog — closes the enrollment gap left by Apple's user-initiated flow, no manual follow-up. Deployed across a 300-device fleet against Okta and Entra ID. |
+| `force-psso.sh` | Detects Macs that never completed Platform SSO registration and re-prompts the user via swiftDialog — closes the enrollment gap left by Apple's user-initiated flow, no manual follow-up. Deployed to production across a 300-device fleet against Microsoft Entra ID, and validated against Okta in a developer tenant. |
 | `restart-mac.sh` | Graceful restart workflow with user notifications and maintenance messaging — useful for patching, remediation, and scheduled maintenance |
 | `announcement-dialog.sh` | Displays user-facing dialogs for maintenance notices, required actions, and IT communications |
 | `set-teams-wallpaper.sh` | Deploys corporate Microsoft Teams background images to user profiles |
