@@ -25,7 +25,7 @@ These resources demonstrate endpoint visibility, software inventory automation, 
 | Resource | Purpose |
 |---|---|
 | `homebrew-installed-packages.sh` | Extension Attribute that inventories installed Homebrew packages and casks across managed macOS devices for software visibility, compliance reporting, and Smart Group targeting |
-| `vscode-extension-allowlist.mobileconfig` | Configuration profile that manages Visual Studio Code extension access by enforcing an approved extension allowlist through managed preferences |
+| `visual-studio-code-enterprise-restrictions.mobileconfig` | Configuration profile that manages Visual Studio Code extension access by enforcing an approved extension allowlist through managed preferences |
 
 ## Usage
 
