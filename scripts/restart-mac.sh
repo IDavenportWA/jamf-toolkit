@@ -4,16 +4,32 @@
 #
 #                    Author : Isaac Davenport
 #                   Created : 09-03-2025
-#             Last Modified : 08-25-2026
-#                   Version : 1.5
+#             Last Modified : 08-29-2026
+#                   Version : 1.6
 #               Tested with : macOS 26.5.2
 #
 #   1.5: swiftDialog now self-installs/updates from GitHub (Team ID verified)
 #        instead of relying on the Jamf policy package. The check only runs
 #        when a dialog will actually be shown (uptime >= 7 days), so machines
 #        under the threshold never touch the GitHub API.
+#   1.6: Dialog icon is now Jamf parameter $4 rather than a hardcoded
+#        organisation-specific jamfcloud branding URL, with a generic SF
+#        Symbol fallback so the script runs unmodified anywhere.
+#
+#   Jamf parameters:
+#     $4  (optional) dialog icon - a branding-image URL, file path, or
+#         SF Symbol spec. Defaults to a system restart glyph.
 #
 ###
+
+###############################################################################
+# Configuration
+###############################################################################
+
+# Dialog icon. Pass a Jamf parameter ($4) to point at your own branding image,
+# e.g. https://<your-instance>.jamfcloud.com/api/v1/branding-images/download/<id>
+# Falls back to a generic system icon so this runs anywhere without edits.
+DIALOG_ICON="${4:-SF=arrow.clockwise.circle.fill,colour=blue}"
 
 ###############################################################################
 # swiftDialog install / update
@@ -190,7 +206,7 @@ if [ "$uptime_days" -ge 7 ] && [ "$uptime_days" -le 13 ]; then
  launchctl asuser "$USER_ID" sudo -u "$CURRENT_USER" /usr/local/bin/dialog \
  --title "Restart required" \
  --message "**${uptime_days} days without a reboot!** \n\nYour Mac needs to restart to stay within compliance. Important security updates may also be installed during the process. Please save your work and press Restart. If you press Defer, you'll be reminded again in 24 hours.\n\nPlease note that if the timer reaches zero, your computer will be automatically restarted. Thank you for your cooperation." \
- --icon "https://ontinue.jamfcloud.com/api/v1/branding-images/download/6" \
+ --icon "$DIALOG_ICON" \
  --button1text "Restart now" \
  --button2text "Defer" \
  --timer 900 \
@@ -213,7 +229,7 @@ elif [ "$uptime_days" -ge 14 ]; then
  launchctl asuser "$USER_ID" sudo -u "$CURRENT_USER" /usr/local/bin/dialog \
  --title "Restart required" \
  --message "**${uptime_days} days without a reboot!** \n\nYour Mac needs to restart to stay within compliance. Important security updates may also be installed during the process.\n\n**After pressing I understand, you will have 10 minutes to restart your computer.**" \
- --icon "https://ontinue.jamfcloud.com/api/v1/branding-images/download/6" \
+ --icon "$DIALOG_ICON" \
  --button1text "I understand" \
  --width 650 --height 230 \
  --messagefont size=13 \
