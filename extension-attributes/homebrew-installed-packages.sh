@@ -1,5 +1,26 @@
 #!/bin/bash
 
+###################################################################################################
+# Script Name:  homebrew-installed-packages.sh
+# Author:       Isaac Davenport
+# Created:      07/09/2026
+# Version:      1.0
+#
+# Purpose:
+#   Jamf Pro Extension Attribute (EA) that inventories Homebrew formulas (with
+#   versions) and casks for the currently logged-in user, for software
+#   visibility, compliance reporting and Smart Group targeting. Homebrew is a
+#   common route for unmanaged software to enter a fleet and is invisible to
+#   standard application inventory.
+#
+# Notes:
+#   - Homebrew is installed per-user, and extension attributes run as root.
+#     brew is therefore invoked via launchctl asuser + sudo -u so it reads the
+#     user's own installation rather than root's (which is empty on every
+#     managed Mac, and would report cleanly and wrongly).
+#   - Supports both Apple silicon (/opt/homebrew) and Intel (/usr/local) paths.
+###################################################################################################
+
 loggedInUser=$(stat -f%Su /dev/console)
 
 if [ "$loggedInUser" = "root" ] || [ -z "$loggedInUser" ]; then
