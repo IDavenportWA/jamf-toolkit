@@ -1,6 +1,6 @@
 # Disable IPv6
 
-Turns IPv6 off on every network service.
+**Turns IPv6 off on every network service.**
 
 Enumerates network services with `networksetup -listallnetworkservices` and applies `-setv6off` to each.
 

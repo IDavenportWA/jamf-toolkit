@@ -1,6 +1,6 @@
 # Restart Mac
 
-Prompts for a restart with pressure that escalates on uptime.
+**Prompts for a restart with pressure that escalates on uptime.**
 
 A patch that is downloaded but never restarted into is not applied, while inventory may still report the device compliant. This script drives the restart, escalating as uptime grows.
 
@@ -12,7 +12,9 @@ A patch that is downloaded but never restarted into is not applied, while invent
 
 Uptime is computed from `kern.boottime`. swiftDialog is only installed or updated once a dialog is actually warranted, so machines under the threshold never touch the GitHub API.
 
-**Jamf parameters**
+---
+
+## Jamf parameters
 
 | Parameter | Purpose |
 |---|---|
