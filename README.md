@@ -8,6 +8,24 @@ Each tool lives in its own folder with a README covering what it does, its Jamf 
 
 ---
 
+## What they look like in production
+
+Most of these run silently. Two drive the user through something instead, and both document the full flow screen by screen in their own README.
+
+<p align="center">
+  <img src="Scripts/ForcePlatformSSO/images/status-card.png" width="520" alt="swiftDialog card titled 'Register Platform Single Sign-on' explaining that a macOS notification will appear, with a progress bar and a disabled 'Please wait…' button.">
+</p>
+
+<p align="center"><sub><a href="Scripts/ForcePlatformSSO">ForcePlatformSSO</a> — the status card that tracks registration while the user signs in</sub></p>
+
+<p align="center">
+  <img src="Scripts/RestartMac/images/restart-required-defer.png" width="620" alt="swiftDialog window titled 'Restart required' reading '13 days without a reboot!' with a countdown bar and Defer and Restart now buttons.">
+</p>
+
+<p align="center"><sub><a href="Scripts/RestartMac">RestartMac</a> — the deferrable prompt shown between 7 and 13 days of uptime</sub></p>
+
+---
+
 ## Scripts
 
 Policy-attached and Self Service scripts.
