@@ -210,7 +210,7 @@ if [ "$uptime_days" -ge 7 ] && [ "$uptime_days" -le 13 ]; then
  --button1text "Restart now" \
  --button2text "Defer" \
  --timer 900 \
- --width 650 --height 280 \
+ --width 650 --height 320 \
  --messagefont size=13 \
  --position bottomright \
  --moveable \
@@ -231,7 +231,7 @@ elif [ "$uptime_days" -ge 14 ]; then
  --message "**${uptime_days} days without a reboot!** \n\nYour Mac needs to restart to stay within compliance. Important security updates may also be installed during the process.\n\n**After pressing I understand, you will have 10 minutes to restart your computer.**" \
  --icon "$DIALOG_ICON" \
  --button1text "I understand" \
- --width 650 --height 230 \
+ --width 650 --height 265 \
  --messagefont size=13 \
  --hidetimerbar \
  --blurscreen \
