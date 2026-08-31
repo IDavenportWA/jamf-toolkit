@@ -4,6 +4,12 @@
 
 Warns the user, waits, quits Chrome, installs, then relaunches it if it was running.
 
+<p align="center">
+  <img src="images/chrome-update-warning.png" width="520" alt="macOS dialog with a caution icon reading 'Google Chrome will close in 60 seconds to apply the latest updates. Please save your work.' with Update now and OK buttons.">
+</p>
+
+The prompt appears only when Chrome is actually running; with it closed the install proceeds silently. *OK* takes the full 60 seconds, while *Update now* skips the wait for anyone who has already saved — the button that sounds like acknowledgement is the one that buys time.
+
 ---
 
 ## Ordering matters here
