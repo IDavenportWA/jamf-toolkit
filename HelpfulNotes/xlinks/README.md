@@ -1,6 +1,6 @@
 # Bookmarks
 
-Reference links I keep coming back to. The `.webloc` files beside this are the Finder versions of the same bookmarks — GitHub cannot render those, so the links live here.
+Reference links I keep coming back to.
 
 ## Jamf documentation
 

@@ -1,2 +1,5 @@
 # macOS
 .DS_Store
+
+# Finder bookmark files — GitHub cannot render them; the links live in HelpfulNotes/xlinks/README.md
+*.webloc
