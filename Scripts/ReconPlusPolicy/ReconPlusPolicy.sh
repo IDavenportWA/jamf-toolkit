@@ -4,10 +4,14 @@
 #
 #                    Author : Isaac Davenport
 #                   Created : 07-22-2026
-#             Last Modified : 08-25-2026
-#                   Version : 1.1
+#             Last Modified : 09-02-2026
+#                   Version : 1.2
 #               Tested with : macOS 26.5.2
-# 
+#
+#   1.2: The swiftDialog command and output files are created with mktemp
+#        instead of fixed, predictable /var/tmp paths. This runs as root, so
+#        a pre-planted symlink at the old fixed path would have had root
+#        write through it. Same fix as SecureTokenUsers 1.1.
 #   1.1: swiftDialog now self-installs/updates from GitHub (Team ID verified)
 #        instead of bailing out when not installed. Runs before the status
 #        window launches. Window auto-closes 15 seconds after all steps complete (user can
@@ -40,8 +44,11 @@
 DIALOG="/usr/local/bin/dialog"
 JAMF="/usr/local/bin/jamf"
 
-COMMAND_FILE="/var/tmp/jamf-maintenance-dialog.log"
-OUTPUT_FILE="/var/tmp/jamf-maintenance-output.log"
+# Unpredictable paths — this runs as root, and swiftDialog reads the command
+# file from the user's session, so both are created here and made readable
+# after validation below.
+COMMAND_FILE=$(mktemp "/var/tmp/jamf-maintenance-dialog.XXXXXX")
+OUTPUT_FILE=$(mktemp "/var/tmp/jamf-maintenance-output.XXXXXX")
 
 ###############################################################################
 # swiftDialog install / update
@@ -202,10 +209,7 @@ fi
 # "swiftDialog is not installed" bail-out)
 check_swift_dialog
 
-rm -f "$COMMAND_FILE" "$OUTPUT_FILE"
-touch "$COMMAND_FILE" "$OUTPUT_FILE"
-
-# The logged-in user only needs to read the command file.
+# mktemp creates them 0600; the logged-in user only needs to read them.
 chmod 644 "$COMMAND_FILE" "$OUTPUT_FILE"
 
 ###############################################################################

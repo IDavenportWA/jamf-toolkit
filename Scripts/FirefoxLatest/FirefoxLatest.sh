@@ -4,8 +4,8 @@
 #
 #                    Author : Isaac Davenport
 #                   Created : 08-25-2026
-#             Last Modified : 08-29-2026
-#                   Version : 1.1
+#             Last Modified : 09-02-2026
+#                   Version : 1.2
 #               Tested with : macOS 26.5.2
 #
 #   1.0: Initial versioned header. Downloads and installs the latest Firefox
@@ -16,14 +16,24 @@
 #        the original on failure. Added a curl failure check, fixed
 #        'hdiutil detach' being called with an empty mount point on the
 #        error path, and moved the quit/relaunch into the user's session.
+#   1.2: Verifies the staged Firefox.app has an intact code signature from
+#        Mozilla's Apple Developer Team ID before the running copy is quit
+#        or touched. A tampered or truncated download now fails closed with
+#        the existing install untouched and the user never interrupted.
+#        Working files live in a mktemp directory rather than fixed /tmp
+#        paths, and the cleanup trap restores the previous Firefox if the
+#        script is killed mid-swap.
 #
 ###
 
 URL="https://download.mozilla.org/?product=firefox-latest&os=osx&lang=en-US"
-DMG_PATH="/tmp/Firefox.dmg"
 APP_PATH="/Applications/Firefox.app"
-STAGE_PATH="/tmp/Firefox-new.app"
-BACKUP_PATH="/tmp/Firefox-previous.app"
+EXPECTED_TEAM_ID="43AQ936H96"   # Mozilla Corporation
+
+WORK_DIR=$(mktemp -d "/private/tmp/FirefoxLatest.XXXXXX")
+DMG_PATH="$WORK_DIR/Firefox.dmg"
+STAGE_PATH="$WORK_DIR/Firefox-new.app"
+BACKUP_PATH="$WORK_DIR/Firefox-previous.app"
 
 loggedInUser=$(echo "show State:/Users/ConsoleUser" | scutil | awk '/Name :/ { print $3 }')
 loggedInUID=$(id -u "$loggedInUser" 2>/dev/null)
@@ -36,7 +46,12 @@ runAsUser() {
 
 cleanup() {
     [ -n "$MOUNT_POINT" ] && [ -d "$MOUNT_POINT" ] && hdiutil detach "$MOUNT_POINT" -quiet 2>/dev/null
-    rm -rf "$DMG_PATH" "$STAGE_PATH"
+    # If we were interrupted between moving the old copy aside and moving the
+    # new one in, put the old one back rather than leaving no Firefox at all.
+    if [ ! -d "$APP_PATH" ] && [ -d "$BACKUP_PATH" ]; then
+        mv "$BACKUP_PATH" "$APP_PATH"
+    fi
+    rm -rf "$WORK_DIR"
 }
 trap cleanup EXIT
 
@@ -65,9 +80,22 @@ fi
 
 # Stage the new copy first, so a failed copy cannot leave us with no browser
 echo "Staging new Firefox..."
-rm -rf "$STAGE_PATH"
 if ! cp -R "$MOUNT_POINT/Firefox.app" "$STAGE_PATH"; then
     echo "ERROR: Failed to copy Firefox from the DMG, existing install untouched"
+    exit 1
+fi
+
+# Verify the staged copy before the running Firefox is quit or anything on
+# the machine changes. Both checks must pass: the signature is intact, and
+# it is Mozilla's.
+echo "Verifying signature..."
+if ! codesign --verify --deep --strict "$STAGE_PATH" 2>/dev/null; then
+    echo "ERROR: Staged Firefox.app failed code signature verification, existing install untouched"
+    exit 1
+fi
+teamID=$(codesign -dv --verbose=4 "$STAGE_PATH" 2>&1 | awk -F= '/^TeamIdentifier=/ {print $2}')
+if [ "$teamID" != "$EXPECTED_TEAM_ID" ]; then
+    echo "ERROR: Firefox.app failed Team ID verification (expected $EXPECTED_TEAM_ID, got '$teamID'), existing install untouched"
     exit 1
 fi
 
@@ -84,7 +112,6 @@ if [ "$FIREFOX_RUNNING" = true ]; then
 fi
 
 # Swap: keep the old copy until the new one is in place
-rm -rf "$BACKUP_PATH"
 if [ -d "$APP_PATH" ] && ! mv "$APP_PATH" "$BACKUP_PATH"; then
     echo "ERROR: Could not move the existing Firefox aside, aborting"
     exit 1
